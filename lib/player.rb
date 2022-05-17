@@ -5,7 +5,7 @@ class Player
   end
 
   def get_name
-    print 'Cual es tu nombre'
+    puts 'Cual es tu nombre'
     @name = gets.chomp
   end
 

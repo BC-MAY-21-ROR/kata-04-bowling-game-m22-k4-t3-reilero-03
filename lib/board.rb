@@ -8,7 +8,7 @@ class Board
   end
 
   def generate_board
-    @board = Array.new(10) { Array.new(3) { '|__' } }
+    @board = Array.new(10) { Array.new(3) { '0' } }
   end
 
   def total_score

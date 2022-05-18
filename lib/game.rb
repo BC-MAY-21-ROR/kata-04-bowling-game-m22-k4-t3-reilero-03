@@ -1,25 +1,30 @@
+# frozen_string_literal: true
+
 require_relative 'player'
 require_relative 'board'
 
 class Game
-  attr_reader :current_frame
-  
-  @@count = 0
+  attr_reader :current_frame, :throws
 
   def initialize
-    @player = Player.new
-    @board = Board.new.generate_board
     @throws = Array.new(20) { 0 }
     @first_throw = true
+    @current_frame = 0
     @current_throw = 0
-    @current_frame = 1
+    @round_one = 0
+    @round_two = 0
   end
 
   def start
-		@player.get_name
-		@player.welcome
-    puts
-    display_board
+    10.times do
+      @round_one = rand(11)
+      @round_two = rand(11 - @round_one)
+      throw(@round_one)
+      throw(@round_two)
+      # sleep(1)
+      p @throws
+      p score_for_frame(@current_frame)
+    end
   end
 
   def throw(pins)
@@ -40,10 +45,21 @@ class Game
   def score_for_frame(frame)
     score = 0
     shot = 0
+
+    # if frame == 9
+    #   if strike(shot)
+    #     score += @throws[shot + 2] + @throws[shot + 3]
+    #   elsif spare(shot)
+    #     score += @throws[shot + 2]
+    #   end
+    # end
+
     frame.times do |_|
       score += @throws[shot] + @throws[shot + 1]
 
-      if(spare(shot))
+      if strike(shot) || strike(shot + 1)
+        score += @throws[shot + 2] + @throws[shot + 3]
+      elsif spare(shot)
         score += @throws[shot + 2]
       end
 
@@ -60,27 +76,27 @@ class Game
     @throws[shot] == 10
   end
 
-	def rounds
-		@round_one = rand(11)
-		@round_two = rand(11 - @round_one)
-    @total = @round_one + @round_two
-  end
+  # def rounds
+  # 	@round_one = rand(11)
+  # 	@round_two = rand(11 - @round_one)
+  #   @total = @round_one + @round_two
+  # end
 
-  def display_board
-    @board.each_with_index.map do |frame, frame_idx|
-      @game.times do
-        if @@count == frame_idx
-          rounds
-          @total_two += @total
-          frame[0] = @round_one 
-          frame[1] = @round_two
-          frame[2] = @total_two
-          @@count += 1
-        end
-      end
-    end
-    print @board
-  end
+  # def display_board
+  #   @board.each_with_index.map do |frame, frame_idx|
+  #     @game.times do
+  #       if @@count == frame_idx
+  #         rounds
+  #         @total_two += @total
+  #         frame[0] = @round_one
+  #         frame[1] = @round_two
+  #         frame[2] = @total_two
+  #         @@count += 1
+  #       end
+  #     end
+  #   end
+  #   print @board
+  # end
   # def display_board
   #   board = Board.new.generate_board
   #   board.map do |b|
@@ -93,3 +109,4 @@ class Game
 end
 
 new_game = Game.new
+new_game.start

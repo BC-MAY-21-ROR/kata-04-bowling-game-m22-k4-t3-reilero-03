@@ -1,6 +1,7 @@
-class Board
+# frozen_string_literal: true
 
-  def initialize()
+class Board
+  def initialize
     @trie_one = nil
     @trie_two = nil
     @total = 0

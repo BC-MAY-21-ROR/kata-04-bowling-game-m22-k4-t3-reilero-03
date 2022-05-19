@@ -2,8 +2,10 @@
 
 require_relative 'player'
 require_relative 'board'
+require 'colorize'
+require 'terminal-table'
 
-TOTAL_FRAMES = 3
+TOTAL_FRAMES = 10
 class Game
   attr_reader :current_frame, :throws
 
@@ -21,29 +23,37 @@ class Game
       throw(round_one)
       throw(round_two)
 
-     if i == TOTAL_FRAMES - 1 # última Frame
+      next unless i == TOTAL_FRAMES - 1 # última Frame
+
       throw_bonus_1 = rand(10)
       throw_bonus_2 = rand(10)
       if round_one == 10 # Último frame strike
-        if throw_bonus_1 == 10 # Strike
-          throw(throw_bonus_1)
-          throw(0)
-          throw(throw_bonus_2)
-        else
-          throw(throw_bonus_1)
-          throw(throw_bonus_2)
-        end
-      elsif round_one + round_two == 10 
+        throw(throw_bonus_1)
+        throw(0) if throw_bonus_1 == 10 # Strike
+        throw(throw_bonus_2)
+      elsif round_one + round_two == 10
         throw(throw_bonus_1)
       end
-     end
     end
 
     p @throws
-    p score
+    puts score
+    arr_score = []
     TOTAL_FRAMES.times do |i|
-      print "#{score_for_frame(i + 1)} "
+     arr_score << score_for_frame(i + 1)
     end
+    puts "\n"
+    print paint_table_score(arr_score)
+  end
+
+  def paint_table_score(arr_score)
+    table = Terminal::Table.new
+    table.title = "Bowling - Game".green
+    table.headings = Array.new(@throws.length/2).each_with_index.map{|_value, idx|"#{idx + 1}".yellow}
+    table.rows = [@throws.each_slice(2).map{|par| par.join(" - ")}]
+    table.add_separator
+    table.add_row arr_score + ["#{arr_score.last}".red]
+    puts table
   end
 
   def throw(pins)
@@ -70,17 +80,17 @@ class Game
     score = 0
     shot = 0
     frame.times do |_|
-      if strike(shot)
-        if strike(shot + 2)
-          score += 10 + @throws[shot + 2] + @throws[shot + 4]
-        else
-          score += 10 + @throws[shot + 2] + @throws[shot + 3]
-        end
-      elsif spare(shot)
-        score += 10 + @throws[shot + 2]
-      else 
-        score += @throws[shot] + @throws[shot + 1]
-      end
+      score += if strike(shot)
+                 if strike(shot + 2)
+                   10 + @throws[shot + 2] + @throws[shot + 4]
+                 else
+                   10 + @throws[shot + 2] + @throws[shot + 3]
+                 end
+               elsif spare(shot)
+                 10 + @throws[shot + 2]
+               else
+                 @throws[shot] + @throws[shot + 1]
+               end
 
       shot += 2
     end
@@ -98,7 +108,6 @@ class Game
   def game_over
     @current_frame == TOTAL_FRAMES
   end
-
 end
 
 game = Game.new
@@ -117,7 +126,7 @@ game.start
 #     player_2 = Player.new('Nicolás')
 #     game_player_2 = Game.new
 #   end
-# 
+#
 #   def play
 #     if !game_player_1.game_over
 #       player_1_throws = player_1.get_throws
@@ -128,8 +137,8 @@ game.start
 #       game.throw(player_1_throws)
 #     end
 #     if game_player_1.game_over && game_player_2.game_over
-# 
+#
 #     end
 #   end
-# 
+#
 # end

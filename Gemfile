@@ -10,3 +10,4 @@ gem 'rexml'
 gem 'rubycritic'
 gem 'rubycritic-small-badge', require: false
 gem 'sandi_meter', '~> 1.2'
+gem 'text-table', '~> 1.2', '>= 1.2.4'

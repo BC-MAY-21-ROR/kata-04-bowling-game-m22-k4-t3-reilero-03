@@ -8,11 +8,21 @@ class Player
   end
 
   def get_name
-    puts 'Cual es tu nombre'
+    puts "Hello..."
+    sleep(1)
+    puts "What is your name?"
     @name = gets.chomp
   end
 
   def welcome
-    print "Hola #{@name}"
+    sleep(0.5)
+    print "Hi! #{@name} \n"
+    sleep(1)
+    print "Welcome to the bowling game \n"
+    sleep(1)
   end
 end
+
+# player = Player.new
+# player.get_name
+# player.welcome

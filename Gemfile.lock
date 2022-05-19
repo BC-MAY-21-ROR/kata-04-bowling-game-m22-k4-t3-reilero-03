@@ -83,6 +83,7 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
+    text-table (1.2.4)
     thread_safe (0.3.6)
     tty-which (0.4.2)
     victor (0.2.8)
@@ -103,6 +104,7 @@ DEPENDENCIES
   rubycritic
   rubycritic-small-badge
   sandi_meter (~> 1.2)
+  text-table (~> 1.2, >= 1.2.4)
 
 BUNDLED WITH
    2.3.13

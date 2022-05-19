@@ -3,7 +3,7 @@
 require_relative 'player'
 require_relative 'board'
 
-TOTAL_FRAMES = 3
+TOTAL_FRAMES = 10
 class Game
   attr_reader :current_frame, :throws
 
@@ -15,13 +15,16 @@ class Game
   end
 
   def start
+    # player = Player.new
+    # player.get_name
+    # player.welcome
     TOTAL_FRAMES.times do |i|
       round_one = rand(11)
       round_two = rand(11 - round_one)
       throw(round_one)
       throw(round_two)
 
-     if i == TOTAL_FRAMES - 1 # última Frame
+     if i == TOTAL_FRAMES - 1 # último Frame
       throw_bonus_1 = rand(10)
       throw_bonus_2 = rand(10)
       if round_one == 10 # Último frame strike
@@ -39,10 +42,11 @@ class Game
      end
     end
 
-    p @throws
-    p score
+    print "Lanzamiento #{@throws} \n"
+    
+    print  "Total Score: #{score} \n"
     TOTAL_FRAMES.times do |i|
-      print "#{score_for_frame(i + 1)} "
+      print "Score for frame #{i + 1}: #{score_for_frame(i + 1)} \n"
     end
   end
 

@@ -3,27 +3,46 @@
 require_relative 'player'
 require_relative 'board'
 
+TOTAL_FRAMES = 3
 class Game
   attr_reader :current_frame, :throws
 
   def initialize
-    @throws = Array.new(20) { 0 }
+    @throws = Array.new(22) { 0 }
     @first_throw = true
     @current_frame = 0
     @current_throw = 0
-    @round_one = 0
-    @round_two = 0
   end
 
   def start
-    10.times do
-      @round_one = rand(11)
-      @round_two = rand(11 - @round_one)
-      throw(@round_one)
-      throw(@round_two)
-      # sleep(1)
-      p @throws
-      p score_for_frame(@current_frame)
+    TOTAL_FRAMES.times do |i|
+      round_one = rand(11)
+      round_two = rand(11 - round_one)
+      throw(round_one)
+      throw(round_two)
+
+     if i == TOTAL_FRAMES - 1 # última Frame
+      throw_bonus_1 = rand(10)
+      throw_bonus_2 = rand(10)
+      if round_one == 10 # Último frame strike
+        if throw_bonus_1 == 10 # Strike
+          throw(throw_bonus_1)
+          throw(0)
+          throw(throw_bonus_2)
+        else
+          throw(throw_bonus_1)
+          throw(throw_bonus_2)
+        end
+      elsif round_one + round_two == 10 
+        throw(throw_bonus_1)
+      end
+     end
+    end
+
+    p @throws
+    p score
+    TOTAL_FRAMES.times do |i|
+      print "#{score_for_frame(i + 1)} "
     end
   end
 
@@ -40,27 +59,27 @@ class Game
       @current_frame += 1
       @first_throw = true
     end
+    @current_frame = [TOTAL_FRAMES, @current_frame + 1].min
+  end
+
+  def score
+    score_for_frame(@current_frame)
   end
 
   def score_for_frame(frame)
     score = 0
     shot = 0
-
-    # if frame == 9
-    #   if strike(shot)
-    #     score += @throws[shot + 2] + @throws[shot + 3]
-    #   elsif spare(shot)
-    #     score += @throws[shot + 2]
-    #   end
-    # end
-
     frame.times do |_|
-      score += @throws[shot] + @throws[shot + 1]
-
-      if strike(shot) || strike(shot + 1)
-        score += @throws[shot + 2] + @throws[shot + 3]
+      if strike(shot)
+        if strike(shot + 2)
+          score += 10 + @throws[shot + 2] + @throws[shot + 4]
+        else
+          score += 10 + @throws[shot + 2] + @throws[shot + 3]
+        end
       elsif spare(shot)
-        score += @throws[shot + 2]
+        score += 10 + @throws[shot + 2]
+      else 
+        score += @throws[shot] + @throws[shot + 1]
       end
 
       shot += 2
@@ -76,37 +95,41 @@ class Game
     @throws[shot] == 10
   end
 
-  # def rounds
-  # 	@round_one = rand(11)
-  # 	@round_two = rand(11 - @round_one)
-  #   @total = @round_one + @round_two
-  # end
+  def game_over
+    @current_frame == TOTAL_FRAMES
+  end
 
-  # def display_board
-  #   @board.each_with_index.map do |frame, frame_idx|
-  #     @game.times do
-  #       if @@count == frame_idx
-  #         rounds
-  #         @total_two += @total
-  #         frame[0] = @round_one
-  #         frame[1] = @round_two
-  #         frame[2] = @total_two
-  #         @@count += 1
-  #       end
-  #     end
-  #   end
-  #   print @board
-  # end
-  # def display_board
-  #   board = Board.new.generate_board
-  #   board.map do |b|
-  #     b.map do |c|
-  #       print c
-  #     end
-  #     print "\n"
-  #   end
-  # end
 end
 
-new_game = Game.new
-new_game.start
+game = Game.new
+game.start
+
+# class Player
+#   attr_reader :name
+#   def initialize(name)
+#     @name = name
+#   end
+# end
+# class Bowling
+#   def initialize()
+#     player_1 = Player.new('Augustin')
+#     game_player_1 = Game.new
+#     player_2 = Player.new('Nicolás')
+#     game_player_2 = Game.new
+#   end
+# 
+#   def play
+#     if !game_player_1.game_over
+#       player_1_throws = player_1.get_throws
+#       game.throw(player_1_throws)
+#     end
+#     if !game_player_1.game_over
+#       player_1_throws = player_1.get_throws
+#       game.throw(player_1_throws)
+#     end
+#     if game_player_1.game_over && game_player_2.game_over
+# 
+#     end
+#   end
+# 
+# end

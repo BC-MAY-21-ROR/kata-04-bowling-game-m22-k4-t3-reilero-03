@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'text-table'
+require 'terminal-table'
+
 
 class Board
   def initialize
@@ -19,3 +21,16 @@ class Board
   end
 end
 
+# rows = []
+# rows << ['One', 1]
+# rows << ['Two', 2]
+# rows << ['Three', 3]
+# table = Terminal::Table.new :headings => ['Word', 'Number'], :rows => rows
+
+# puts table
+#
+# +-------+---+
+# | One   | 1 |
+# | Two   | 2 |
+# | Three | 3 |
+# +-------+---+

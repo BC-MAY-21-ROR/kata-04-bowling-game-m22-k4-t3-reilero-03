@@ -17,9 +17,9 @@ class Game
   end
 
   def start
-    # player = Player.new
-    # player.get_name
-    # player.welcome
+    player = Player.new
+    player.get_name
+    player.welcome
     TOTAL_FRAMES.times do |i|
       round_one = rand(11)
       round_two = rand(11 - round_one)
@@ -41,18 +41,47 @@ class Game
       elsif round_one + round_two == 10 
         throw(throw_bonus_1)
       end
-     end
+    end
+    # print "jugada #{i + 1} primer tiro #{round_one} \n"
+    # sleep(0.8)
+    # print "jugada #{i + 1} segundo tiro #{round_two} \n"
+    # sleep(0.8)
+    # print "Total frame #{score_for_frame(current_frame) } \n"
+    # puts "\n"
+      
+      rows = []
+      rows << ["Intento #{@current_throw - 1}", round_one]
+      rows << ["Intento #{@current_throw}", round_two]
+      rows << ['Total frame', score_for_frame(current_frame)]
+      table = Terminal::Table.new :headings => ["Frame #{i + 1}", 'Puntos'], :rows => rows
+      table.title = "Bowling - Game".green
+      puts table
+      sleep(1)
+      print "\e[2J\e[H"
+
     end
 
-    print "Lanzamiento #{@throws} \n"
+    # a = 1
+    # @throws.each do |tiro|
+    #   print "Tiro #{a}: #{tiro}\n"
+    #   a +=1
+    # end
     
     print  "Total Score: #{score} \n"
     arr_score = []
     TOTAL_FRAMES.times do |i|
       arr_score << score_for_frame(i + 1)
     end
+
     puts "\n"
     print paint_table_score(arr_score)
+  end
+
+  def paint_each_game
+    table = Terminal::Table.new
+    table.title = "Jugadas".green
+    table.headings = "Tiro Numero: #{ i + 1}"
+    table.rows = round_one
   end
 
   def paint_table_score(arr_score)

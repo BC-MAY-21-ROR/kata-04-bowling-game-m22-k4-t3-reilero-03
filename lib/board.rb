@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'text-table'
+
 class Board
   def initialize
     @trie_one = nil
@@ -16,3 +18,4 @@ class Board
     @total = @trie_one + @trie_two
   end
 end
+

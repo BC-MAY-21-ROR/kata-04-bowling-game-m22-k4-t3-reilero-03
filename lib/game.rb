@@ -17,30 +17,39 @@ class Game
   end
 
   def start
+    # player = Player.new
+    # player.get_name
+    # player.welcome
     TOTAL_FRAMES.times do |i|
       round_one = rand(11)
       round_two = rand(11 - round_one)
       throw(round_one)
       throw(round_two)
 
-      next unless i == TOTAL_FRAMES - 1 # última Frame
-
+     if i == TOTAL_FRAMES - 1 # último Frame
       throw_bonus_1 = rand(10)
       throw_bonus_2 = rand(10)
       if round_one == 10 # Último frame strike
-        throw(throw_bonus_1)
-        throw(0) if throw_bonus_1 == 10 # Strike
-        throw(throw_bonus_2)
-      elsif round_one + round_two == 10
+        if throw_bonus_1 == 10 # Strike
+          throw(throw_bonus_1)
+          throw(0)
+          throw(throw_bonus_2)
+        else
+          throw(throw_bonus_1)
+          throw(throw_bonus_2)
+        end
+      elsif round_one + round_two == 10 
         throw(throw_bonus_1)
       end
+     end
     end
 
-    p @throws
-    puts score
+    print "Lanzamiento #{@throws} \n"
+    
+    print  "Total Score: #{score} \n"
     arr_score = []
     TOTAL_FRAMES.times do |i|
-     arr_score << score_for_frame(i + 1)
+      arr_score << score_for_frame(i + 1)
     end
     puts "\n"
     print paint_table_score(arr_score)
@@ -80,17 +89,17 @@ class Game
     score = 0
     shot = 0
     frame.times do |_|
-      score += if strike(shot)
-                 if strike(shot + 2)
-                   10 + @throws[shot + 2] + @throws[shot + 4]
-                 else
-                   10 + @throws[shot + 2] + @throws[shot + 3]
-                 end
-               elsif spare(shot)
-                 10 + @throws[shot + 2]
-               else
-                 @throws[shot] + @throws[shot + 1]
-               end
+      if strike(shot)
+        if strike(shot + 2)
+          score += 10 + @throws[shot + 2] + @throws[shot + 4]
+        else
+          score += 10 + @throws[shot + 2] + @throws[shot + 3]
+        end
+      elsif spare(shot)
+        score += 10 + @throws[shot + 2]
+      else 
+        score += @throws[shot] + @throws[shot + 1]
+      end
 
       shot += 2
     end
@@ -108,6 +117,7 @@ class Game
   def game_over
     @current_frame == TOTAL_FRAMES
   end
+
 end
 
 game = Game.new
@@ -126,7 +136,7 @@ game.start
 #     player_2 = Player.new('Nicolás')
 #     game_player_2 = Game.new
 #   end
-#
+# 
 #   def play
 #     if !game_player_1.game_over
 #       player_1_throws = player_1.get_throws
@@ -137,8 +147,8 @@ game.start
 #       game.throw(player_1_throws)
 #     end
 #     if game_player_1.game_over && game_player_2.game_over
-#
+# 
 #     end
 #   end
-#
+# 
 # end

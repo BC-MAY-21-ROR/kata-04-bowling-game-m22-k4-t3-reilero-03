@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# This class ask the name to the player and give a greetings
 class Player
   attr_reader :name
 
@@ -7,10 +8,10 @@ class Player
     @name = name
   end
 
-  def get_name
-    puts "Hello..."
+  def ask_name
+    puts 'Hello...'
     sleep(1)
-    puts "What is your name?"
+    puts 'What is your name?'
     @name = gets.chomp
   end
 

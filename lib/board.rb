@@ -3,7 +3,7 @@
 require 'text-table'
 require 'terminal-table'
 
-
+# This class generate the board for the bowling score
 class Board
   def initialize
     @trie_one = nil
